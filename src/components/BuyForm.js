@@ -41,8 +41,7 @@ class BuyForm extends Component {
           required />
         <div className="input-group-append">
           <div className="input-group-text">
-            <img src={ethLogo} height='32' alt=""/>
-            &nbsp;&nbsp;&nbsp; ETH
+            ROSE
           </div>
         </div>
       </div>
@@ -62,14 +61,13 @@ class BuyForm extends Component {
         />
         <div className="input-group-append">
           <div className="input-group-text">
-            <img src={tokenLogo} height='32' alt=""/>
-            &nbsp; DApp
+             XLB
           </div>
         </div>
       </div>
       <div className="mb-5">
         <span className="float-left text-muted">Exchange Rate</span>
-        <span className="float-right text-muted">1 ETH = 100 DApp</span>
+        <span className="float-right text-muted">1 ROSE = 100 XLB</span>
       </div>
       <button type="submit" className="btn btn-primary btn-block btn-lg">SWAP!</button>
     </form>

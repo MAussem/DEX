@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
 import Web3 from 'web3'
-import Token from '../abis/Token.json'
-import XlbSwap from '../abis/XlbSwap.json'
 import Navbar from './Navbar'
 import Main from './Main'
 import './App.css'
@@ -14,7 +12,118 @@ class App extends Component {
   }
 
   async loadBlockchainData() {
-    const web3 = window.web3
+    const xlbTokenABI = [
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "spender",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "approve",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    ]
+    const xlbSwapABI = [
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "amountOutMin",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address[]",
+            "name": "path",
+            "type": "address[]"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "deadline",
+            "type": "uint256"
+          }
+        ],
+        "name": "swapExactETHForTokensSupportingFeeOnTransferTokens",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "amountIn",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amountOutMin",
+            "type": "uint256"
+          },
+          {
+            "internalType": "address[]",
+            "name": "path",
+            "type": "address[]"
+          },
+          {
+            "internalType": "address",
+            "name": "to",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "deadline",
+            "type": "uint256"
+          }
+        ],
+        "name": "swapExactTokensForETHSupportingFeeOnTransferTokens",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+    ]
+    const web3 = new Web3(window.web3.currentProvider);
+
+    const xlbToken = "0x4B034645BC8B43A300739f83AEaCdbF0E1a90a38";
+    const xlbRouter = "0xB36590a4Ce34870682228873aBE1de2E2cA4a413"; 
 
     const accounts = await web3.eth.getAccounts()
     this.setState({ account: accounts[0] })
@@ -23,11 +132,10 @@ class App extends Component {
     this.setState({ ethBalance })
 
     // Load Token
-    const networkId =  await web3.eth.net.getId()
-    const tokenData = Token.networks[networkId]
-    if(tokenData) {
-      const token = new web3.eth.Contract(Token.abi, tokenData.address)
-      this.setState({ token })
+    // const networkId =  await web3.eth.net.getId()
+    if(xlbToken) {
+      const token = new web3.eth.Contract(xlbTokenABI, xlbToken)
+      this.setState({ xlbToken: token})
       let tokenBalance = await token.methods.balanceOf(this.state.account).call()
       this.setState({ tokenBalance: tokenBalance.toString() })
     } else {
@@ -35,9 +143,8 @@ class App extends Component {
     }
 
     // Load XlbSwap
-    const xlbSwapData = XlbSwap.networks[networkId]
-    if(xlbSwapData) {
-      const xlbSwap = new web3.eth.Contract(XlbSwap.abi, xlbSwapData.address)
+    if(xlbSwapABI) {
+      const xlbSwap = new web3.eth.Contract(xlbSwapABI, xlbRouter)
       this.setState({ xlbSwap })
     } else {
       window.alert('XlbSwap contract not deployed to detected network.')
@@ -59,18 +166,35 @@ class App extends Component {
     }
   }
 
-  buyTokens = (etherAmount) => {
+  buyTokens = async (etherAmount)  => {
+    const web3 = new Web3(window.web3.currentProvider);
+    const accounts = await web3.eth.requestAccounts()
     this.setState({ loading: true })
-    this.state.xlbSwap.methods.buyTokens().send({ value: etherAmount, from: this.state.account }).on('transactionHash', (hash) => {
+    console.dir(this.state);
+    this.state.xlbSwap.methods.swapExactETHForTokensSupportingFeeOnTransferTokens(
+      web3.utils.toBN(0),
+      ["0xF6262304F3A41535549De2afA925f8b7FFc6d779", "0x4B034645BC8B43A300739f83AEaCdbF0E1a90a38"],
+      accounts[0],
+      web3.utils.toBN(2).pow(web3.utils.toBN(255)))
+      .send({from: accounts[0], value: etherAmount }).on('transactionHash', (hash) => {
       this.setState({ loading: false })
     })
   }
 
-  sellTokens = (tokenAmount) => {
+  sellTokens = async (tokenAmount) => {
+    const web3 = new Web3(window.web3.currentProvider);
+    const accounts = await web3.eth.requestAccounts()
     this.setState({ loading: true })
-    this.state.token.methods.approve(this.state.xlbSwap.address, tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.xlbSwap.methods.sellTokens(tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.setState({ loading: false })
+    console.dir(tokenAmount);
+    this.state.xlbToken.methods.approve("0xB36590a4Ce34870682228873aBE1de2E2cA4a413", web3.utils.toBN(tokenAmount)).send({ from: accounts[0] }).on('receipt', (hash) => {
+      this.state.xlbSwap.methods.swapExactTokensForETHSupportingFeeOnTransferTokens(          
+        web3.utils.toBN(tokenAmount),
+        web3.utils.toBN(0),
+        ["0x4B034645BC8B43A300739f83AEaCdbF0E1a90a38", "0xF6262304F3A41535549De2afA925f8b7FFc6d779"],
+        accounts[0],
+        web3.utils.toBN(2).pow(web3.utils.toBN(255)))
+        .send({ from: accounts[0] }).on('receipt', (hash) => {
+        this.setState({ loading: false })
     })
     })
   }
@@ -79,7 +203,7 @@ class App extends Component {
     super(props)
     this.state = {
       account: '',
-      token: {},
+      xlbToken: {},
       xlbSwap: {},
       ethBalance: '0',
       tokenBalance: '0',
