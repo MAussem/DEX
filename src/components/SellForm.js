@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import tokenLogo from '../token-logo.png'
-import ethLogo from '../eth-logo.png'
 
 class SellForm extends Component {
   constructor(props) {
@@ -40,8 +38,7 @@ class SellForm extends Component {
           required />
         <div className="input-group-append">
           <div className="input-group-text">
-            <img src={tokenLogo} height='32' alt=""/>
-            &nbsp; DApp
+           XLB
           </div>
         </div>
       </div>
@@ -61,8 +58,7 @@ class SellForm extends Component {
         />
         <div className="input-group-append">
           <div className="input-group-text">
-            <img src={ethLogo} height='32' alt=""/>
-            &nbsp;&nbsp;&nbsp; ETH
+            ROSE
           </div>
         </div>
       </div>
