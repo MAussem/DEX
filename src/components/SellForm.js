@@ -29,7 +29,7 @@ class SellForm extends Component {
           onChange={(event) => {
             const tokenAmount = this.input.value.toString()
             this.setState({
-              output: tokenAmount / 100
+              output: tokenAmount / 50
             })
           }}
           ref={(input) => { this.input = input }}
