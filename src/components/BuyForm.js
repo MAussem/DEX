@@ -30,7 +30,7 @@ class BuyForm extends Component {
           onChange={(event) => {
             const etherAmount = this.input.value.toString()
             this.setState({
-              output: etherAmount * 50
+              output: etherAmount * 70.55
             })
           }}
           ref={(input) => { this.input = input }}
@@ -65,7 +65,7 @@ class BuyForm extends Component {
       </div>
       <div className="mb-5">
         <span className="float-left text-muted">Exchange Rate</span>
-        <span className="float-right text-muted">1 ROSE = 100 XLB</span>
+        <span className="float-right text-muted">1 ROSE = 70.55 XLB</span>
       </div>
       <button type="submit" className="btn btn-primary btn-block btn-lg">SWAP!</button>
     </form>
