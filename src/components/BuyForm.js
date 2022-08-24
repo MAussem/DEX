@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 class BuyForm extends Component {
+
   constructor(props) {
     super(props)
     this.state = {
@@ -65,9 +66,19 @@ class BuyForm extends Component {
       </div>
       <div className="mb-5">
         <span className="float-left text-muted">Exchange Rate</span>
-        <span className="float-right text-muted">1 ROSE = 70.55 XLB</span>
+        <span className="float-right text-muted">1 ROSE = 30.212 XLB</span>
       </div>
-      <button type="submit" className="btn btn-primary btn-block btn-lg">SWAP!</button>
+      {/* <button className="" 
+      style={{
+        marginLeft:"28%"
+      }}>
+        25%</button>
+      <button className="">50%</button>
+      <button className="">75%</button>
+      <button className="">100%</button> */}
+      <button type="submit" className="btn btn-primary btn-block btn-lg" style={{
+        marginTop:60
+      }}>SWAP!</button>
     </form>
     );
   }

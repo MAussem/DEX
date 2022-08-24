@@ -28,9 +28,12 @@ class Main extends Component {
 
     return (
 
-      <div id="content" className="mt-3">
+      <div id="content" className="mt-3" 
+      >
 
-        <div className="d-flex justify-content-between mb-3">
+        <div className="d-flex justify-content-between mb-3" style={{
+        marginTop:25
+      }}>
           <button
               className="btn btn-light"
               onClick={(event) => {
@@ -50,9 +53,12 @@ class Main extends Component {
           </button>
         </div>
 
-        <div className="card mb-4" >
+        <div className="card mb-4" 
+          style={{
+            marginTop:75
+          }}>
 
-          <div className="card-body">
+          <div className="card-body" >
 
             {content}
 
