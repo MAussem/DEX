@@ -13,7 +13,10 @@ class Navbar extends Component {
                 src="../flame.svg"
                 alt=""
               />
-              <div className="text-white">XLBSWAP</div>
+              <div className="text-white" style={{
+                marginLeft:240, 
+              }}>
+                XLBSWAP</div>
         <ul className="navbar-nav px-3">
           <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
             <small className="text-secondary">

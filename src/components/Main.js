@@ -32,7 +32,7 @@ class Main extends Component {
       >
 
         <div className="d-flex justify-content-between mb-3" style={{
-        marginTop:25
+        marginTop:50
       }}>
           <button
               className="btn btn-light"
@@ -55,7 +55,7 @@ class Main extends Component {
 
         <div className="card mb-4" 
           style={{
-            marginTop:75
+            marginTop:55
           }}>
 
           <div className="card-body" >
